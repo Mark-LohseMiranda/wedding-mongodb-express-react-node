@@ -5,9 +5,8 @@ const URL_PREFIX = "http://localhost:3001";
 // const URL_PREFIX = "https://mymoney-tracker-backend.herokuapp.com"
 
 const API = {
-
   // ---------------- User Routes ---------------- //
-  
+
   login: (usrData) => {
     return axios.post(`${URL_PREFIX}/api/users/login`, usrData, {
       withCredentials: true,
@@ -22,6 +21,20 @@ const API = {
     return axios.get(`${URL_PREFIX}/api/users/logout`, {
       withCredentials: true,
     });
+  },
+
+  update: (data) => {
+    return axios.put(`${URL_PREFIX}/api/users`, data, {
+      withCredentials: true,
+    });
+  },
+
+  signup: (data) => {
+    return axios.post(`${URL_PREFIX}/api/users`, data);
+  },
+
+  delete: () => {
+    return axios.delete(`${URL_PREFIX}/api/users`, { withCredentials: true });
   },
 
   // ---------------- Wedding Routes ---------------- //

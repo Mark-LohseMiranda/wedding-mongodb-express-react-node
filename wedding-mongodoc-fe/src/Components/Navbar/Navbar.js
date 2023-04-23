@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import FORMAT from "../Format/Format";
+// import { ReactComponent as Logo } from "../../Resources/Images/two-wedding-rings-svgrepo-com.svg";
+import { FiMenu } from "react-icons/fi";
+import {CgDarkMode} from "react-icons/cg";
+
+
+
 import API from "../../API/API";
 
 export default function Navbar({ setUserState, loggedIn, setLoggedIn }) {
   const [theme, setTheme] = useState("light");
   const navigate = useNavigate();
+  const logo = require('../../Resources/Images/rings.png')
 
-  const [isOpen, setIsOpen] = useState("false");
+  const [open, setOpen] = useState(false);
 
   const toggleTheme = () => {
     if (theme === "light") {
@@ -43,33 +51,117 @@ export default function Navbar({ setUserState, loggedIn, setLoggedIn }) {
     });
   };
 
-  const login = () => {
-    navigate("/login");
-  };
-
   useEffect(() => {
     const logged = localStorage.getItem("weddingLoggedIn");
     if (logged) setLoggedIn(true);
   }, [setLoggedIn]);
 
   return (
-    <>
+    <header className="py-2 border-b border-gray-300 dark:bg-gray-700">
+      <div className="flex items-center justify-between xl:max-w-7xl xl:mx-auto max-w-full px-[8%] flex-wrap w-full">
+        <img id="logo" src={logo} alt="Logo"/> {/* size css in index.css */}
+        <FiMenu
+          className="block w-6 h-6 cursor-pointer md:hidden dark:text-gray-400"
+          onClick={() => {
+            setOpen(!open);
+          }}
+        />
+        <nav
+          className={`w-full md:flex md:items-center md:w-auto ${
+            open ? "block" : "hidden"
+          }`}
+        >
+          <ul className="text-base text-gray-600 md:flex md:justify-between">
+            <li>
+              <Link
+                className="block py-2 font-semibold md:px-5 hover:text-blue-700 dark:text-gray-400"
+                to="/"
+              >
+                Home
+              </Link>
+            </li>
+            {loggedIn && (
+              <li>
+                <Link
+                  className="block py-2 font-semibold md:px-5 hover:text-blue-700 dark:text-gray-400"
+                  to="/weddings"
+                >
+                  Weddings
+                </Link>
+              </li>
+            )}
+            {!loggedIn && (
+              <li>
+                <Link
+                  className="block py-2 font-semibold md:px-5 hover:text-blue-700 dark:text-gray-400"
+                  to="/login"
+                >
+                  Login
+                </Link>
+              </li>
+            )}
+            {!loggedIn && (
+              <li>
+                <Link
+                  className="block py-2 font-semibold md:px-5 hover:text-blue-700 dark:text-gray-400"
+                  to="/signup"
+                >
+                  Sign Up
+                </Link>
+              </li>
+            )}
+            {loggedIn && (
+              <li>
+                <Link
+                  className="block py-2 font-semibold md:px-5 hover:text-blue-700 dark:text-gray-400"
+                  to="/profile"
+                >
+                  Profile
+                </Link>
+              </li>
+            )}
+            {loggedIn && (
+              <li>
+                <a
+                className="block py-2 font-semibold text-red-500 md:px-5 hover:text-blue-700"
+                onClick={logout}
+                >
+                Logout
+              </a>
+              </li>
+            )}
+            <li className="py-2 md:pt-2">
+              <CgDarkMode className="block w-6 h-6 cursor-pointer dark:text-gray-400" onClick={toggleTheme}/>
+            </li>
+           
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    /*
+<>
       <header className="sticky top-0 z-50 bg-gray-200 dark:bg-gray-700">
         <div className="flex items-center justify-between p-4">
           <div className="py-1">
-            {/* <Link to="/">
-              <img
-                className="w-20 h-20 rounded-lg hover:scale-105"
-                src={logo}
-                alt="cake-logo"
-              />
-            </Link> */}
+
           </div>
           <div className="items-center justify-end flex-1 hidden gap-6 sm:flex">
-            {loggedIn && <Link to="/profile">Profile</Link>}
+            <Link to="/">Home</Link>
             {loggedIn && (
               <button
-                className="p-1 m-3 rounded-lg hover:scale-105 hover:text-white bg-sky-300 dark:bg-blue-700 dark:text-slate-100 drop-shadow-xl"
+                data-te-ripple-init="true"
+                data-te-ripple-color="light"
+                className={FORMAT.button()}
+              >
+                <Link to="/profile">Profile</Link>
+              </button>
+            )}
+            {loggedIn && (
+              <button
+                data-te-ripple-init="true"
+                data-te-ripple-color="light"
+                className={FORMAT.button()}
                 onClick={logout}
               >
                 Logout
@@ -79,7 +171,9 @@ export default function Navbar({ setUserState, loggedIn, setLoggedIn }) {
             {!loggedIn && <Link to="/signup">Sign Up</Link>}
             {!loggedIn && <Link to="/about">About</Link>}
             <button
-              className="p-1 rounded-lg hover:scale-105 hover:text-white bg-sky-300 dark:bg-blue-700 dark:text-slate-100 drop-shadow-xl"
+              data-te-ripple-init="true"
+              data-te-ripple-color="light"
+              className={FORMAT.button()}
               onClick={toggleTheme}
             >
               {" "}
@@ -92,7 +186,9 @@ export default function Navbar({ setUserState, loggedIn, setLoggedIn }) {
               onClick={() => {
                 setIsOpen(true);
               }}
-            ></button>
+            >
+              {""}
+            </button>
             {isOpen === true && (
               <div
                 className="fixed top-0 bottom-0 left-0 right-0 w-full h-full"
@@ -113,7 +209,6 @@ export default function Navbar({ setUserState, loggedIn, setLoggedIn }) {
                 }}
               >
                 <div className="py-1" role="none">
-                  {/* <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" --> */}
                   {loggedIn && (
                     <Link
                       to="/profile"
@@ -176,5 +271,6 @@ export default function Navbar({ setUserState, loggedIn, setLoggedIn }) {
         </div>
       </header>
     </>
+    */
   );
 }
