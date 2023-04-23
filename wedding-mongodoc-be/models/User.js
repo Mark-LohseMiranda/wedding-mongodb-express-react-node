@@ -12,7 +12,7 @@ const userSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	firstName: {
+	displayName: {
 		type: String,
 	},
 	weddings: [weddingSchema],
@@ -34,8 +34,8 @@ userSchema.methods.isCorrectPassword = async function (password) {
 };
 
 // when we query a user, we'll also get another field called `bookCount` with the number of saved books we have
-// userSchema.virtual('transactionCount').get(function () {
-//   return this.savedTransactions.length;
+// userSchema.virtual('weddingCount').get(function () {
+//   return this.weddings.length;
 // });
 
 const User = model("User", userSchema);

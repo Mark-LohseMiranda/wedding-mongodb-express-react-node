@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+
 import Login from "./Components/Login/Login";
 import Home from "./Components/Home/Home";
 import Weddings from "./Components/Weddings/Weddings";
 import Navbar from "./Components/Navbar/Navbar";
 import Parties from "./Components/Parties/Parties";
 import Guests from "./Components/Guests/Guests";
-import Gifts from "./Components/Gifts/Gifts"
+import Gifts from "./Components/Gifts/Gifts";
+import Profile from "./Components/Profile/Profile";
+import Signup from "./Components/Signup/Signup";
 import ProtectedRoute from "./Util/ProtectedRoute";
 
 function App() {
@@ -28,7 +31,23 @@ function App() {
           setLoggedIn={setLoggedIn}
         />
         <Routes>
-        <Route
+          <Route
+            path="/signup"
+            element={<Signup setUserState={setUserState} />}
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute
+                setUserState={setUserState}
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+              >
+                <Profile userState={userState} setUserState={setUserState} setLoggedIn={setLoggedIn} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/gifts"
             element={
               <ProtectedRoute
